@@ -12,7 +12,7 @@ namespace ProductZeissApi.Repositories
     {
         private readonly ProductDbContext dbContext;
 
-        public SQLProductRepositories(ProductDbContext dbContext) 
+        public SQLProductRepositories(ProductDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -59,7 +59,7 @@ namespace ProductZeissApi.Repositories
             {
                 return await dbContext.Products.ToListAsync();
             }
-            catch (Exception ex)                
+            catch (Exception ex)
             {
                 throw new Exception("Error while fetching all products.", ex);
             }
@@ -165,6 +165,6 @@ namespace ProductZeissApi.Repositories
             }
         }
 
-       
+
     }
 }

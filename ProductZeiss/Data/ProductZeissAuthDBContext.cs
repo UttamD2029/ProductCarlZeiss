@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProductZeissApi.Data
 {
-    public class ProductZeissAuthDBContext:IdentityDbContext
+    public class ProductZeissAuthDBContext : IdentityDbContext
     {
         public ProductZeissAuthDBContext(DbContextOptions<ProductZeissAuthDBContext> options) : base(options)
         {
-            
-        }
 
+        }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

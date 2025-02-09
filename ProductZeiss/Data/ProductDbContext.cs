@@ -7,7 +7,7 @@ namespace ProductZeissApi.Data
     {
         public ProductDbContext(DbContextOptions<ProductDbContext> DbContextOptions) : base(DbContextOptions)
         {
-            
+
         }
 
         public DbSet<Product> Products { get; set; }

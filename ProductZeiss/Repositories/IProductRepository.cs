@@ -12,7 +12,7 @@ namespace ProductZeissApi.Repositories
 
         Task<Product> CreateProductAsync(Product product);
 
-        Task<Product?> UpdateProductAsync(int id ,Product product);
+        Task<Product?> UpdateProductAsync(int id, Product product);
 
         Task<Product?> DeleteProductAsync(int id);
 

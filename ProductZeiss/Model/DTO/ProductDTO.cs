@@ -4,7 +4,7 @@ namespace ProductZeissApi.Model.DTO
 {
     public class ProductDTO
     {
-        
+
         public int ProductId { get; set; } // Auto-generated 6-digit unique ID
         [Required]
         public string Name { get; set; }

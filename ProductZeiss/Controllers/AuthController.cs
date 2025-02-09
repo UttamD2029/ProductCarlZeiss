@@ -13,7 +13,7 @@ namespace ProductZeissApi.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly ITokenRepository tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager , ITokenRepository tokenRepository)
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             this.userManager = userManager;
             this.tokenRepository = tokenRepository;
@@ -23,27 +23,34 @@ namespace ProductZeissApi.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
         {
-            var IdentityUser = new IdentityUser
+            try
             {
-                UserName = registerRequestDTO.Username,
-                Email = registerRequestDTO.Username
-            };
-
-            var identityResult = await userManager.CreateAsync(IdentityUser, registerRequestDTO.Password);
-
-            if (identityResult.Succeeded)
-            {
-                if(registerRequestDTO.Roles != null && registerRequestDTO.Roles.Any())
+                var IdentityUser = new IdentityUser
                 {
-                    identityResult = await userManager.AddToRolesAsync(IdentityUser, registerRequestDTO.Roles);
+                    UserName = registerRequestDTO.Username,
+                    Email = registerRequestDTO.Username
+                };
 
-                    if (identityResult.Succeeded)
+                var identityResult = await userManager.CreateAsync(IdentityUser, registerRequestDTO.Password);
+
+                if (identityResult.Succeeded)
+                {
+                    if (registerRequestDTO.Roles != null && registerRequestDTO.Roles.Any())
                     {
-                        return Ok("User was Registered");
+                        identityResult = await userManager.AddToRolesAsync(IdentityUser, registerRequestDTO.Roles);
+
+                        if (identityResult.Succeeded)
+                        {
+                            return Ok("User was Registered");
+                        }
                     }
                 }
+                return BadRequest("User was not added");
             }
-            return BadRequest("User was not added");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         //POST : /api/Auth/Register
@@ -51,31 +58,39 @@ namespace ProductZeissApi.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
         {
-            var user = await userManager.FindByEmailAsync(loginRequestDTO.Username);
-
-            if (user != null)
+            try
             {
-                var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+                var user = await userManager.FindByEmailAsync(loginRequestDTO.Username);
 
-                if(checkPasswordResult)
+                if (user != null)
                 {
-                    //Getting Roles for the user
-                    var roles = await userManager.GetRolesAsync(user);
+                    var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
 
-                    if (roles != null)
+                    if (checkPasswordResult)
                     {
-                        //Token Generation
-                        var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+                        //Getting Roles for the user
+                        var roles = await userManager.GetRolesAsync(user);
 
-                        var response = new LoginResponseDTO
+                        if (roles != null)
                         {
-                            JwtToken = jwtToken
-                        };
-                        return Ok(response);
-                    }                    
+                            //Token Generation
+                            var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+
+                            var response = new LoginResponseDTO
+                            {
+                                JwtToken = jwtToken
+                            };
+                            return Ok(response);
+                        }
+                    }
                 }
+                return BadRequest("UserName or Password incorrect");
             }
-            return BadRequest("UserName or Password incorrect");
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
