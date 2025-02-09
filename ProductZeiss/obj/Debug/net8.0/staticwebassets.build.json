@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "ocpTHh5xrqwJbOZ7VZPLbpqa7ACIsRGJV89ETSRHBe8=",
+  "Source": "ProductZeissApi",
+  "BasePath": "_content/ProductZeissApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
