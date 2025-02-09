@@ -4,7 +4,7 @@ namespace ProductZeissApi.Model.Domain
 {
     public class Product
     {
-        
+
         public int ProductId { get; set; } // Auto-generated 6-digit unique ID
         [Required]
         public string Name { get; set; }

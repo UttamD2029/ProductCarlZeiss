@@ -5,7 +5,7 @@ namespace ProductZeissApi.Model.DTO
     public class AddProductDTO
     {
         [Required]
-        [MaxLength(50,ErrorMessage ="Name has to be Maximum of 50 characters")]
+        [MaxLength(50, ErrorMessage = "Name has to be Maximum of 50 characters")]
         public string Name { get; set; }
 
         [Required]

@@ -13,14 +13,16 @@ using ProductZeissApi.Repositories;
 namespace ProductZeissApi.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]    
+    [ApiController]
     public class ProductController : ControllerBase
     {
         private readonly ProductDbContext dbContext;
         private readonly IProductRepository productRepository;
         private static readonly Random _random = new Random();
         private readonly IMapper mapper;
-        public ProductController(ProductDbContext productDbContext, IProductRepository productRepository,IMapper mapper)
+        private ProductDbContext context;
+
+        public ProductController(ProductDbContext productDbContext, IProductRepository productRepository, IMapper mapper)
         {
             this.dbContext = productDbContext;
             this.productRepository = productRepository;
@@ -56,7 +58,6 @@ namespace ProductZeissApi.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
         }
 
         [HttpGet]
@@ -103,10 +104,9 @@ namespace ProductZeissApi.Controllers
 
                 //Add the Domain to create a Product
                 addProductDomain = await productRepository.CreateProductAsync(addProductDomain);
-                
+
                 var productDTO = mapper.Map<ProductDTO>(addProductDomain);
 
-                //return CreatedAtAction("success", addProductDomain);
                 return CreatedAtAction(nameof(GetProductById), new { id = productDTO.ProductId }, productDTO);
             }
             catch (Exception ex)
@@ -125,7 +125,7 @@ namespace ProductZeissApi.Controllers
             [FromBody] UpdateProductDTO updateProductDTO)
         {
             try
-            {                
+            {
                 //Mapping DTO to Domain Model
                 var productDomainModel = mapper.Map<Product>(updateProductDTO);
 
@@ -135,7 +135,7 @@ namespace ProductZeissApi.Controllers
                     return NotFound();
                 }
 
-                // Convert back to DTO
+                //Mapping Domain to DTO Model
                 var productDTO = mapper.Map<ProductDTO>(productDomainModel);
 
                 return Ok(productDTO);
@@ -151,21 +151,21 @@ namespace ProductZeissApi.Controllers
         [Authorize(Roles = "Writer,Reader")]
         public async Task<IActionResult> DeleteProduct([FromRoute] int id)
         {
-            try 
-            { 
-            var productDomainModel = await productRepository.DeleteProductAsync(id);
-            if (productDomainModel == null)
+            try
             {
-                return NotFound();
-            }
+                var productDomainModel = await productRepository.DeleteProductAsync(id);
+                if (productDomainModel == null)
+                {
+                    return NotFound();
+                }
 
-            // Convert Domain to DTO model
-            var productDTO = mapper.Map<ProductDTO>(productDomainModel);
-            return Ok(productDTO);
+                //Mapping Domain to DTO Model
+                var productDTO = mapper.Map<ProductDTO>(productDomainModel);
+                return Ok(productDTO);
             }
-              catch (Exception ex)
+            catch (Exception ex)
             {
-               return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -213,7 +213,7 @@ namespace ProductZeissApi.Controllers
                     return NotFound();
                 }
 
-                return Ok(new { message = "Stock added successfully." });
+                return Ok("Stock added successfully.");
             }
             catch (ArgumentException ex)
             {

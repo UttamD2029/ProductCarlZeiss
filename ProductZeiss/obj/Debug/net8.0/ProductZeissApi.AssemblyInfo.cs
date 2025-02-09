@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProductZeissApi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+445e3df18680954e7dc2ed680b7c543963b707d1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+24d28320a9dadda91e3fa855129201263205f855")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProductZeissApi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProductZeissApi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
